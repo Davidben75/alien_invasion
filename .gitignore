@@ -1,0 +1,11 @@
+# Virtual Environnement
+myvenv/
+
+# Python 
+__pycache__/
+
+# Configurations diverses
+.DS_Store
+
+#  IDE
+.vscode/

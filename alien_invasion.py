@@ -15,6 +15,10 @@ def run_game():
     # Make a ship 
     ship = Ship(ai_settings ,screen)
     bullets = Group()
+    aliens = Group()
+
+    # Create the fleet of aliens
+    gf.create_fleet(ai_settings, screen, ship ,aliens)
 
     # Start the main loop
     while True:
@@ -22,11 +26,13 @@ def run_game():
         ship.update()
         bullets.update()
 
+
         # Get rid of bullets that disapperead 
         for bullet in bullets.copy():
             if bullet.rect.bottom <= 0:
                 bullets.remove(bullet)
         gf.update_bullets(bullets)
-        gf.update_screen(ai_settings, screen, ship, bullets)
+        gf.update_aliens(ai_settings, aliens)
+        gf.update_screen(ai_settings, screen, ship, aliens,bullets)
 
 run_game()

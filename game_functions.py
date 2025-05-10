@@ -47,8 +47,23 @@ def update_screen(ai_settings, screen, ship, aliens, bullets):
     # Make the most recent drawn visible
     pygame.display.flip()
 
-def update_bullets(bullets):
+def update_bullets(ai_settings, screen, ship ,aliens, bullets):
     bullets.update()
+
+    # Get rid of bullets that disapperead 
+    for bullet in bullets.copy():
+        if bullet.rect.bottom <= 0:
+            bullets.remove(bullet)
+    check_bullet_alien_collision(ai_settings, screen, ship ,aliens, bullets)
+
+def check_bullet_alien_collision(ai_settings, screen, ship ,aliens, bullets): 
+    # Check if a bullet hit an allien
+    # If so get rid of both
+    collisions = pygame.sprite.groupcollide(bullets, aliens, True, True)
+    
+    if len(aliens) == 0:
+        bullets.empty()
+        create_fleet(ai_settings, screen, ship, aliens)
 
 def fire_bullet(ai_settings, screen, ship, bullets):
      """Fire a bullet if the limit not reached"""
@@ -85,9 +100,13 @@ def get_number_aliens_x(ai_settings, alien_width):
     number_aliens_x = int(available_space_x / (2 * alien_width)) 
     return number_aliens_x    
 
-def update_aliens(ai_settings, aliens):
+def update_aliens(ai_settings, ship,aliens):
     check_fleet_edges(ai_settings, aliens)
     aliens.update()
+
+    # Look for alien and ship collision 
+    if pygame.sprite.spritecollideany(ship, aliens):
+         print("Ship hit!!!")
 
 def check_fleet_edges(ai_settings, aliens):
      for alien in aliens.sprites():
